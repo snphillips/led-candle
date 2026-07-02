@@ -50,7 +50,7 @@ This project requires two short animations. If you don't like mine you can make 
 You'll need [python](https://www.python.org/about/gettingstarted/) & [FFmpeg](https://ffmpeg.org/) installed on your computer.
 
 - Take two vertical videos with you phone then airdrop them it to your computer.
-- Edit the video to your liking. I use the mac's iMovie for this step. Remove the sound track, adjust contrast, make it greyscale, crop it. Keep in mind we have limited space on the small Adafruit ItsyBitsy. Your final animations can't be longer than about 15 seconds total.
+- Edit the video to your liking. I use Apples's iMovie for this step. Remove the sound track, adjust contrast, make it greyscale, crop it. Keep in mind we have limited space on the small Adafruit ItsyBitsy. Your final animations can't be longer than about 15 seconds total.
 - Export the two source videos you'd like to turn into animations. Use a low resolution as you'll eventually be resizing each frame to 9px x 16px.
 - Place each video in their own folders named **flame-normal-source-mp4** and **flame-flicker-source-mp4**
 - Name the normal flame video `flame-normal-source.mp4`, and name the flicker flame video `flame-flicker-source.mp4`
