@@ -25,12 +25,12 @@ First, install the [Arduino IDE](https://www.arduino.cc/en/software).
 
 - Connect the Adafruit ItsyBitsy MO Express into your computer via USB (ensure it's a USB data cable).
 
-- Using the Arduino IDE, open `led-candle.ino`.
+- Using the Arduino IDE (Finder → Applications → Arduino IDE), open `led-candle.ino`.
 
 - Select Adafruit ItsyBitsy MO Express from the Tools->Board menu.
   Next go into the Tools -> Programmer menu and select the USBtinyISP programmer.
 
-- Upload `led-candle.ino` to the Adafruit ItsyBitsy board by pressing the tiny button on the Adafruit ItsyBitsy. Within eight seconds, select Sketch > Upload Using Programmer. Wait until you see the message "Done uploading".
+- Upload `led-candle.ino` to the Adafruit ItsyBitsy board by navigating to Sketch -> Upload.  If that fails, try pressing the tiny button on the Adafruit ItsyBitsy. Within eight seconds, select Sketch > Upload Using Programmer. Wait until you see the message "Done uploading".
   If your code uploaded successfully, at the end of the output message you'll see a paragraph like this:
 
 `Verify successful
@@ -39,7 +39,7 @@ writeWord(addr=0xe000ed0c,value=0x5fa0004)`
 
 Nothing will happen yet, but now the code is on your Adafruit ItsyBitsy.
 
-## How to Assemble Hardware
+## How to Assemble & Solder Hardware
 
 TODO: flush out this section
 
