@@ -24,6 +24,12 @@
 // ── Distance threshold ────────────────────────────────────────────────────
 #define FLICKER_DISTANCE_MM  1200  // Switch to flicker below this distance
 
+// ── Brightness ─────────────────────────────────────────────────────────────
+// Global brightness scale applied to every PWM value before it's sent to
+// the LED driver, as a percentage (0-100). Lower = dimmer. The IS31FL3731
+// has no master brightness register, so this scales each byte in software.
+#define BRIGHTNESS_PERCENT  55
+
 // ── Objects ───────────────────────────────────────────────────────────────
 Adafruit_VL53L0X lox       = Adafruit_VL53L0X();
 Adafruit_IS31FL3731 ledmatrix = Adafruit_IS31FL3731();
@@ -52,6 +58,12 @@ void pageSelect(uint8_t n) {
   beginRegisterWrite(REG_CMD);
   Wire.write(n);
   Wire.endTransmission();
+}
+
+// Scale a raw 0-255 PWM value by BRIGHTNESS_PERCENT. Applied at
+// transmission time so the source animation data itself stays untouched.
+inline uint8_t scaleBrightness(uint8_t value) {
+  return (uint16_t)value * BRIGHTNESS_PERCENT / 100;
 }
 
 // ── Animation ─────────────────────────────────────────────────────────────
@@ -97,7 +109,7 @@ bool runAnimation(const uint8_t *animationData) {
   uint8_t i = 0, byteCounter = 1;
   for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
     for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-      Wire.write(img[i++]);
+      Wire.write(scaleBrightness(img[i++]));
       if (++byteCounter >= 32) {
         Wire.endTransmission();
         beginRegisterWrite(REG_PWM_START + i);
@@ -114,34 +126,23 @@ bool runAnimation(const uint8_t *animationData) {
 void setup() {
   Serial.begin(115200);
 
+  // LED_BUILTIN is used as a "flicker triggered" indicator in loop() —
+  // must be configured as an output or digitalWrite() has no effect.
+  pinMode(LED_BUILTIN, OUTPUT);
+
   // Initialise I2C with explicit pins at 400 KHz (IS31FL3731 maximum).
   Wire.begin(SDA_PIN, SCL_PIN);
   Wire.setClock(400000);
 
-  // ── IS31FL3731 manual init ────────────────────────────────────────────
-  // Clear Function Registers (leave Shutdown bit set — bit 10 of 13).
-  pageSelect(REG_FUNC_PAGE);
-  beginRegisterWrite(0x00);
-  for (uint8_t i = 0; i < 13; i++) Wire.write(i == 10 ? 1 : 0);
-  Wire.endTransmission();
-
-  // Enable all LEDs and clear blink/PWM registers on both frame pages.
-  for (uint8_t p = 0; p < 2; p++) {
-    pageSelect(p);
-    beginRegisterWrite(0x00);
-    for (uint8_t i = 0; i < 18; i++) Wire.write(0xFF); // Enable all 144 LEDs
-
-    uint8_t byteCounter = 19;
-    for (uint8_t i = 18; i < REG_PWM_END; i++) {
-      Wire.write(0); // Zero blink & PWM registers
-      if (++byteCounter >= 32) {
-        byteCounter = 1;
-        Wire.endTransmission();
-        beginRegisterWrite(i);
-      }
-    }
-    Wire.endTransmission();
-  }
+  // NOTE: the previous manual IS31FL3731 init sequence (function-register
+  // clear + per-page LED enable/PWM zeroing) has been removed. It was
+  // fully redundant with ledmatrix.begin() below, which performs the same
+  // setup through the Adafruit library, and contained a chunking bug that
+  // could leave stray bits set in the blink-control registers (0x12–0x23).
+  // If you need manual, library-independent init for some reason, restore
+  // it carefully and make sure the chunk-boundary register address is
+  // computed the same way runAnimation() does it (i.e. using the *post-
+  // increment* index, not the raw loop variable).
 
   // ── VL53L0X init ──────────────────────────────────────────────────────
   if (!lox.begin()) {
@@ -149,7 +150,8 @@ void setup() {
     while (1);
   }
 
-  // ── LED matrix Adafruit init ──────────────────────────────────────────
+  // ── LED matrix init (handles function-register clear, LED enable,
+  //    and PWM/blink register zeroing internally) ─────────────────────
   if (!ledmatrix.begin(LED_DRIVER_ADDR)) {
     Serial.println(F("Failed to init LED matrix"));
     while (1);
