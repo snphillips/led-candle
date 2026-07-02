@@ -15,7 +15,7 @@ An arduino led candle that flickers when something goes near it. This project is
 - Have the parts listed in the Parts section below, plus wire, solder, flux & soldering iron
 - If you want to generate your own animations, have Python & FFmpeg installed on your computer (the leading multimedia framework): https://ffmpeg.org/
 
-## How to Install Software onto the Adafruit ItsyBitsy MO Express
+## How to Install Software onto the Adafruit ItsyBitsy M0 Express
 
 First, install the [Arduino IDE](https://www.arduino.cc/en/software).
 
@@ -23,19 +23,13 @@ First, install the [Arduino IDE](https://www.arduino.cc/en/software).
 
 `git clone https://github.com/snphillips/led-candle.git`
 
-- Connect the Adafruit ItsyBitsy MO Express into your computer via USB (ensure it's a USB data cable).
+- Connect the Adafruit ItsyBitsy M0 Express into your computer via USB (ensure it's a USB data cable).
 
 - Using the Arduino IDE (Finder → Applications → Arduino IDE), open `led-candle.ino`.
 
-- Select Adafruit ItsyBitsy MO Express from the Tools->Board menu.
-  Next go into the Tools -> Programmer menu and select the USBtinyISP programmer.
+- Select Adafruit ItsyBitsy M0 Express from the Tools->Board menu.
 
-- Upload `led-candle.ino` to the Adafruit ItsyBitsy board by navigating to Sketch -> Upload.  If that fails, try pressing the tiny button on the Adafruit ItsyBitsy. Within eight seconds, select Sketch > Upload Using Programmer. Wait until you see the message "Done uploading".
-  If your code uploaded successfully, at the end of the output message you'll see a paragraph like this:
-
-`Verify successful
-Done in 3.607 seconds
-writeWord(addr=0xe000ed0c,value=0x5fa0004)`
+- Upload `led-candle.ino` to the Adafruit ItsyBitsy board by navigating to Sketch -> Upload.  If that fails, quickly double-tap the tiny reset button on the Adafruit ItsyBitsy. Within eight seconds, select Sketch > Upload Using Programmer. Wait until you see the message "Done uploading".
 
 Nothing will happen yet, but now the code is on your Adafruit ItsyBitsy.
 
@@ -49,7 +43,7 @@ This project requires two short animations. If you don't like mine you can make 
 
 You'll need [python](https://www.python.org/about/gettingstarted/) & [FFmpeg](https://ffmpeg.org/) installed on your computer.
 
-- Take two vertical videos with you phone then airdrop them it to your computer.
+- Take two vertical videos with you phone then airdrop them to your computer.
 - Edit the video to your liking. I use Apples's iMovie for this step. Remove the sound track, adjust contrast, make it greyscale, crop it. Keep in mind we have limited space on the small Adafruit ItsyBitsy. Your final animations can't be longer than about 15 seconds total.
 - Export the two source videos you'd like to turn into animations. Use a low resolution as you'll eventually be resizing each frame to 9px x 16px.
 - Place each video in their own folders named **flame-normal-source-mp4** and **flame-flicker-source-mp4**
@@ -97,22 +91,22 @@ cd flame-normal-source-pngs
 python3 convert-flame-normal.py *.png > animationNormal.h
 ```
 
-- Move the `h` file `animationFlicker.h` into the root of the project folder: led-candle.
+- Move the `h` file `animationNormal.h` into the root of the project folder: led-candle.
 
-- Confirm that the project folder contains the three files needed to upload to the Adafruit Adafruit ItsyBitsy MO Express: `led-candle.ino`, `animationNormal.h`, `animationFlicker.h`.
+- Confirm that the project folder contains the three files needed to upload to the Adafruit Adafruit ItsyBitsy M0 Express: `led-candle.ino`, `animationNormal.h`, `animationFlicker.h`.
 
-- Connect the Adafruit ItsyBitsy MO Express into your computer. The instructions below assume you connected it using USB.
+- Connect the Adafruit ItsyBitsy M0 Express into your computer. The instructions below assume you connected it using USB.
 
 - Using the Arduino IDE, open `led-candle.ino`.
 
-- Upload `led-candle.ino`, `animationNormal.h` & `animationFlicker.h` to the Adafruit ItsyBitsy MO Express board by pressing the tiny button on the Adafruit ItsyBitsy MO Express. Within eight seconds, select Sketch > Upload Using Programmer. Wait until you see the message "Done uploading".
+- Upload `led-candle.ino`, `animationNormal.h` & `animationFlicker.h` to the Adafruit ItsyBitsy M0 Express board by pressing the tiny button on the Adafruit ItsyBitsy M0 Express. Within eight seconds, select Sketch > Upload Using Programmer. Wait until you see the message "Done uploading".
 
 ## Parts
 
-- Adafruit ItsyBitsy MO Express microcontroller [3727](https://www.adafruit.com/product/3727)
+- Adafruit ItsyBitsy M0 Express microcontroller [3727](https://www.adafruit.com/product/3727)
 - Charlieplex LED Matrix Driver (Adafruit product id: [2946](https://www.adafruit.com/product/2946))
 - Charlieplex LED Matrix (Adafruit product id: 2947, [2948](https://www.adafruit.com/product/2948), 2972, 2973 or 2974)
 - 350 mAh LiPoly battery (Adafruit product id: [2750](https://www.adafruit.com/product/2750))
-- LiPoly backpack (Adafruit product id: [2124](https://www.adafruit.com/product/2224))
+- LiPoly backpack (Adafruit product id: [2124](https://www.adafruit.com/product/2124))
 - On-Off Power Button / Pushbutton Toggle Switch (Adafruit product id: [1683](https://www.adafruit.com/product/1683))
 - Adafruit VL53LOX Time of Flight Distance Sensor (Adafruit product id: [3317](https://www.adafruit.com/product/3317))
